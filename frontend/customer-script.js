@@ -1,264 +1,15 @@
 // ===============================================
-// UBER EATS CLONE - CUSTOMER INTERFACE JAVASCRIPT
+// UBER EATS CLONE - CUSTOMER INTERFACE (BACKEND INTEGRATION)
 // ===============================================
 
 // GLOBAL STATE
 let cart = [];
 let currentRestaurant = null;
-let currentUser = null;
-
-// MOCK DATA (Same as admin data)
-const mockData = {
-    restaurants: [
-        {
-            id: 'rest-001',
-            name: "Mario's Italian Kitchen",
-            cuisine: 'italian',
-            description: 'Authentic Italian cuisine with fresh ingredients and traditional recipes',
-            address: '123 Little Italy St, New York, NY 10013',
-            phone: '(555) 123-4567',
-            email: 'mario@italianplace.com',
-            coverImage: 'https://images.unsplash.com/photo-1574615552620-54cd32a28519?w=400&h=200&fit=crop',
-            isOpen: true,
-            isActive: true,
-            rating: 4.5,
-            totalReviews: 234,
-            deliveryFee: 3.99,
-            minimumOrder: 15.00,
-            estimatedDeliveryTime: 35
-        },
-        {
-            id: 'rest-002',
-            name: 'Bella Roma Pizzeria',
-            cuisine: 'italian',
-            description: 'Wood-fired pizzas and homemade pasta in the heart of the city',
-            address: '456 Roma Avenue, New York, NY 10014',
-            phone: '(555) 234-5678',
-            email: 'giuseppe@bellaroma.com',
-            coverImage: 'https://images.unsplash.com/photo-1552580715-4d9bc27f1e2f?w=400&h=200&fit=crop',
-            isOpen: true,
-            isActive: true,
-            rating: 4.3,
-            totalReviews: 189,
-            deliveryFee: 2.99,
-            minimumOrder: 12.00,
-            estimatedDeliveryTime: 30
-        },
-        {
-            id: 'rest-003',
-            name: 'Dragon Palace',
-            cuisine: 'chinese',
-            description: 'Traditional Szechuan and Cantonese dishes with bold flavors',
-            address: '789 Chinatown Ave, New York, NY 10013',
-            phone: '(555) 345-6789',
-            email: 'chen@dragonpalace.com',
-            coverImage: 'https://images.pexels.com/photos/2670327/pexels-photo-2670327.jpeg?w=400&h=200&fit=crop',
-            isOpen: true,
-            isActive: true,
-            rating: 4.7,
-            totalReviews: 312,
-            deliveryFee: 4.99,
-            minimumOrder: 20.00,
-            estimatedDeliveryTime: 25
-        },
-        {
-            id: 'rest-004',
-            name: 'Golden Wok Express',
-            cuisine: 'chinese',
-            description: 'Fast and delicious Chinese takeout with generous portions',
-            address: '321 Dragon Street, New York, NY 10013',
-            phone: '(555) 456-7890',
-            email: 'li@goldenwok.com',
-            coverImage: 'https://images.unsplash.com/photo-1598444800952-884dfce6f145?w=400&h=200&fit=crop',
-            isOpen: false,
-            isActive: true,
-            rating: 4.2,
-            totalReviews: 156,
-            deliveryFee: 3.49,
-            minimumOrder: 10.00,
-            estimatedDeliveryTime: 20
-        }
-    ],
-    
-    menuItems: [
-        // Mario's Italian Kitchen Items
-        {
-            id: 'menu-001',
-            restaurantId: 'rest-001',
-            name: 'Margherita Pizza',
-            description: 'Classic pizza with fresh mozzarella, tomato sauce, and basil',
-            price: 18.99,
-            category: 'mains',
-            image: 'https://images.pexels.com/photos/28528512/pexels-photo-28528512.jpeg?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: true
-        },
-        {
-            id: 'menu-002',
-            restaurantId: 'rest-001',
-            name: 'Spaghetti Carbonara',
-            description: 'Traditional Roman pasta with eggs, pecorino cheese, and pancetta',
-            price: 22.50,
-            category: 'mains',
-            image: 'https://images.unsplash.com/photo-1552580715-4d9bc27f1e2f?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: false
-        },
-        {
-            id: 'menu-003',
-            restaurantId: 'rest-001',
-            name: 'Tiramisu',
-            description: 'Classic Italian dessert with coffee-soaked ladyfingers and mascarpone',
-            price: 8.99,
-            category: 'desserts',
-            image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: true
-        },
-        {
-            id: 'menu-004',
-            restaurantId: 'rest-001',
-            name: 'Bruschetta Trio',
-            description: 'Three pieces of toasted bread with different toppings',
-            price: 12.99,
-            category: 'appetizers',
-            image: 'https://images.unsplash.com/photo-1552580715-4d9bc27f1e2f?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: true
-        },
-        
-        // Bella Roma Pizzeria Items
-        {
-            id: 'menu-005',
-            restaurantId: 'rest-002',
-            name: 'Pepperoni Pizza',
-            description: 'Classic pepperoni pizza with mozzarella and tomato sauce',
-            price: 19.99,
-            category: 'mains',
-            image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: false
-        },
-        {
-            id: 'menu-006',
-            restaurantId: 'rest-002',
-            name: 'Caesar Salad',
-            description: 'Fresh romaine lettuce with parmesan, croutons, and caesar dressing',
-            price: 12.99,
-            category: 'appetizers',
-            image: 'https://images.unsplash.com/photo-1552580715-4d9bc27f1e2f?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: true
-        },
-        {
-            id: 'menu-007',
-            restaurantId: 'rest-002',
-            name: 'Quattro Stagioni Pizza',
-            description: 'Pizza with four sections: mushrooms, ham, artichokes, and olives',
-            price: 24.99,
-            category: 'mains',
-            image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: false
-        },
-        
-        // Dragon Palace Items
-        {
-            id: 'menu-008',
-            restaurantId: 'rest-003',
-            name: 'Kung Pao Chicken',
-            description: 'Spicy Szechuan chicken with peanuts and vegetables',
-            price: 16.99,
-            category: 'mains',
-            image: 'https://images.pexels.com/photos/6646264/pexels-photo-6646264.jpeg?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: false
-        },
-        {
-            id: 'menu-009',
-            restaurantId: 'rest-003',
-            name: 'Pork Dumplings (8 pcs)',
-            description: 'Steamed pork dumplings with ginger soy dipping sauce',
-            price: 12.99,
-            category: 'appetizers',
-            image: 'https://images.pexels.com/photos/6646264/pexels-photo-6646264.jpeg?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: false
-        },
-        {
-            id: 'menu-010',
-            restaurantId: 'rest-003',
-            name: 'Yang Chow Fried Rice',
-            description: 'Traditional fried rice with shrimp, char siu, and eggs',
-            price: 14.99,
-            category: 'mains',
-            image: 'https://images.pexels.com/photos/6646264/pexels-photo-6646264.jpeg?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: false
-        },
-        {
-            id: 'menu-011',
-            restaurantId: 'rest-003',
-            name: 'Hot and Sour Soup',
-            description: 'Traditional Chinese soup with tofu, mushrooms, and bamboo shoots',
-            price: 8.99,
-            category: 'appetizers',
-            image: 'https://images.pexels.com/photos/6646264/pexels-photo-6646264.jpeg?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: true
-        },
-        {
-            id: 'menu-012',
-            restaurantId: 'rest-003',
-            name: 'Mango Pudding',
-            description: 'Smooth and creamy mango pudding with fresh fruit',
-            price: 6.99,
-            category: 'desserts',
-            image: 'https://images.pexels.com/photos/6646264/pexels-photo-6646264.jpeg?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: true
-        },
-        
-        // Golden Wok Express Items
-        {
-            id: 'menu-013',
-            restaurantId: 'rest-004',
-            name: 'Sweet and Sour Pork',
-            description: 'Crispy pork with pineapple and bell peppers in sweet and sour sauce',
-            price: 15.99,
-            category: 'mains',
-            image: 'https://images.pexels.com/photos/6646264/pexels-photo-6646264.jpeg?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: false
-        },
-        {
-            id: 'menu-014',
-            restaurantId: 'rest-004',
-            name: 'Beef and Broccoli',
-            description: 'Tender beef strips with fresh broccoli in brown sauce',
-            price: 16.99,
-            category: 'mains',
-            image: 'https://images.pexels.com/photos/6646264/pexels-photo-6646264.jpeg?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: false
-        },
-        {
-            id: 'menu-015',
-            restaurantId: 'rest-004',
-            name: 'Vegetable Spring Rolls (4 pcs)',
-            description: 'Crispy spring rolls filled with fresh vegetables',
-            price: 7.99,
-            category: 'appetizers',
-            image: 'https://images.pexels.com/photos/6646264/pexels-photo-6646264.jpeg?w=300&h=200&fit=crop',
-            isAvailable: true,
-            isVegetarian: true
-        }
-    ]
-};
 
 // INITIALIZATION
 document.addEventListener('DOMContentLoaded', function() {
-    loadRestaurants();
+    initializeAuth();
+    loadRestaurantsFromAPI();
     setupEventListeners();
     loadCartFromStorage();
     updateCartDisplay();
@@ -276,7 +27,7 @@ function setupEventListeners() {
     const sortFilter = document.getElementById('sort-filter');
     if (sortFilter) {
         sortFilter.addEventListener('change', function() {
-            loadRestaurants(this.value);
+            loadRestaurantsFromAPI(null, this.value);
         });
     }
     
@@ -303,49 +54,41 @@ function setupEventListeners() {
     });
 }
 
-// RESTAURANT LOADING
-function loadRestaurants(sortBy = 'rating') {
+// RESTAURANT LOADING WITH BACKEND
+async function loadRestaurantsFromAPI(cuisineType = null, sortBy = 'rating') {
     const container = document.getElementById('restaurants-grid');
     if (!container) return;
     
-    // Get current cuisine filter
-    const activeCategory = document.querySelector('.category-card.active');
-    const cuisineFilter = activeCategory ? activeCategory.getAttribute('data-cuisine') : 'all';
-    
-    // Filter restaurants
-    let filteredRestaurants = mockData.restaurants;
-    if (cuisineFilter !== 'all') {
-        filteredRestaurants = mockData.restaurants.filter(restaurant => 
-            restaurant.cuisine === cuisineFilter
-        );
-    }
-    
-    // Sort restaurants
-    filteredRestaurants = sortRestaurants(filteredRestaurants, sortBy);
-    
-    // Clear container
-    container.innerHTML = '';
-    
-    // Render restaurants
-    filteredRestaurants.forEach(restaurant => {
-        const restaurantCard = createRestaurantCard(restaurant);
-        container.appendChild(restaurantCard);
-    });
-}
-
-function sortRestaurants(restaurants, sortBy) {
-    return [...restaurants].sort((a, b) => {
-        switch(sortBy) {
-            case 'rating':
-                return b.rating - a.rating;
-            case 'delivery-time':
-                return a.estimatedDeliveryTime - b.estimatedDeliveryTime;
-            case 'price':
-                return a.deliveryFee - b.deliveryFee;
-            default:
-                return 0;
+    try {
+        // Show loading state
+        container.innerHTML = '<div class="loading">Loading restaurants...</div>';
+        
+        // Get current cuisine filter if not specified
+        if (cuisineType === null) {
+            const activeCategory = document.querySelector('.category-card.active');
+            cuisineType = activeCategory ? activeCategory.getAttribute('data-cuisine') : 'all';
         }
-    });
+        
+        // Load restaurants from API
+        const restaurants = await loadRestaurants(cuisineType === 'all' ? null : cuisineType, sortBy);
+        
+        // Clear container
+        container.innerHTML = '';
+        
+        // Render restaurants
+        if (restaurants.length === 0) {
+            container.innerHTML = '<div class="no-restaurants">No restaurants found</div>';
+            return;
+        }
+        
+        restaurants.forEach(restaurant => {
+            const restaurantCard = createRestaurantCard(restaurant);
+            container.appendChild(restaurantCard);
+        });
+    } catch (error) {
+        container.innerHTML = '<div class="error">Failed to load restaurants. Please try again.</div>';
+        console.error('Error loading restaurants:', error);
+    }
 }
 
 function createRestaurantCard(restaurant) {
@@ -355,28 +98,28 @@ function createRestaurantCard(restaurant) {
     
     card.innerHTML = `
         <div class="restaurant-card-image">
-            <img src="${restaurant.coverImage}" alt="${restaurant.name}">
-            <span class="restaurant-status ${restaurant.isOpen ? 'open' : 'closed'}">
-                ${restaurant.isOpen ? 'Open' : 'Closed'}
+            <img src="${restaurant.cover_image_url || 'https://images.unsplash.com/photo-1574615552620-54cd32a28519?w=400&h=200&fit=crop'}" alt="${restaurant.name}">
+            <span class="restaurant-status ${restaurant.is_open ? 'open' : 'closed'}">
+                ${restaurant.is_open ? 'Open' : 'Closed'}
             </span>
-            <span class="delivery-time">${restaurant.estimatedDeliveryTime} min</span>
+            <span class="delivery-time">${restaurant.estimated_delivery_time} min</span>
         </div>
         <div class="restaurant-card-content">
             <div class="restaurant-card-header">
                 <div>
                     <h3 class="restaurant-name">${restaurant.name}</h3>
-                    <p class="restaurant-cuisine">${restaurant.cuisine} Cuisine</p>
+                    <p class="restaurant-cuisine">${restaurant.cuisine_type} Cuisine</p>
                 </div>
                 <div class="restaurant-rating">
-                    <span>⭐ ${restaurant.rating}</span>
-                    <span class="text-muted">(${restaurant.totalReviews})</span>
+                    <span>⭐ ${restaurant.average_rating.toFixed(1)}</span>
+                    <span class="text-muted">(${restaurant.total_reviews})</span>
                 </div>
             </div>
             <p class="restaurant-description">${restaurant.description}</p>
             <div class="restaurant-footer">
                 <div class="delivery-info">
-                    <span class="delivery-fee">$${restaurant.deliveryFee.toFixed(2)} delivery</span>
-                    <span class="text-muted"> • $${restaurant.minimumOrder.toFixed(2)} min</span>
+                    <span class="delivery-fee">$${restaurant.delivery_fee.toFixed(2)} delivery</span>
+                    <span class="text-muted"> • $${restaurant.minimum_order.toFixed(2)} min</span>
                 </div>
             </div>
         </div>
@@ -395,39 +138,41 @@ function filterByCuisine(cuisine) {
     document.querySelector(`[data-cuisine="${cuisine}"]`).classList.add('active');
     
     // Reload restaurants with filter
-    loadRestaurants();
+    loadRestaurantsFromAPI(cuisine);
 }
 
-// RESTAURANT MODAL
-function openRestaurantModal(restaurantId) {
-    const restaurant = mockData.restaurants.find(r => r.id === restaurantId);
-    if (!restaurant) return;
-    
-    currentRestaurant = restaurant;
-    
-    // Update modal content
-    updateRestaurantModalContent(restaurant);
-    
-    // Show modal
-    document.getElementById('restaurant-modal').style.display = 'block';
+// RESTAURANT MODAL WITH BACKEND
+async function openRestaurantModal(restaurantId) {
+    try {
+        // Show loading state
+        document.getElementById('restaurant-modal').style.display = 'block';
+        document.getElementById('restaurant-header').innerHTML = '<div class="loading">Loading restaurant...</div>';
+        
+        // Load restaurant details from API
+        const { restaurant, menuItems } = await loadRestaurantDetails(restaurantId);
+        
+        currentRestaurant = restaurant;
+        
+        // Update modal content
+        updateRestaurantModalContent(restaurant, menuItems);
+    } catch (error) {
+        console.error('Error loading restaurant details:', error);
+        showNotification('Failed to load restaurant details', 'error');
+        closeRestaurantModal();
+    }
 }
 
-function closeRestaurantModal() {
-    document.getElementById('restaurant-modal').style.display = 'none';
-    currentRestaurant = null;
-}
-
-function updateRestaurantModalContent(restaurant) {
+function updateRestaurantModalContent(restaurant, menuItems) {
     // Update header
     const headerContainer = document.getElementById('restaurant-header');
     headerContainer.innerHTML = `
-        <img src="${restaurant.coverImage}" alt="${restaurant.name}">
+        <img src="${restaurant.cover_image_url || 'https://images.unsplash.com/photo-1574615552620-54cd32a28519?w=400&h=200&fit=crop'}" alt="${restaurant.name}">
         <div class="restaurant-header-overlay">
             <h1 class="restaurant-title">${restaurant.name}</h1>
             <div class="restaurant-details">
-                <span>⭐ ${restaurant.rating} (${restaurant.totalReviews} reviews)</span>
-                <span>🚚 ${restaurant.estimatedDeliveryTime} min</span>
-                <span>💰 $${restaurant.deliveryFee.toFixed(2)} delivery</span>
+                <span>⭐ ${restaurant.average_rating.toFixed(1)} (${restaurant.total_reviews} reviews)</span>
+                <span>🚚 ${restaurant.estimated_delivery_time} min</span>
+                <span>💰 $${restaurant.delivery_fee.toFixed(2)} delivery</span>
             </div>
         </div>
     `;
@@ -437,19 +182,19 @@ function updateRestaurantModalContent(restaurant) {
     infoContainer.innerHTML = `
         <div class="restaurant-stats">
             <div class="stat-item">
-                <span class="stat-value">⭐ ${restaurant.rating}</span>
+                <span class="stat-value">⭐ ${restaurant.average_rating.toFixed(1)}</span>
                 <span class="stat-label">Rating</span>
             </div>
             <div class="stat-item">
-                <span class="stat-value">${restaurant.estimatedDeliveryTime} min</span>
+                <span class="stat-value">${restaurant.estimated_delivery_time} min</span>
                 <span class="stat-label">Delivery Time</span>
             </div>
             <div class="stat-item">
-                <span class="stat-value">$${restaurant.deliveryFee.toFixed(2)}</span>
+                <span class="stat-value">$${restaurant.delivery_fee.toFixed(2)}</span>
                 <span class="stat-label">Delivery Fee</span>
             </div>
             <div class="stat-item">
-                <span class="stat-value">$${restaurant.minimumOrder.toFixed(2)}</span>
+                <span class="stat-value">$${restaurant.minimum_order.toFixed(2)}</span>
                 <span class="stat-label">Minimum</span>
             </div>
         </div>
@@ -457,12 +202,10 @@ function updateRestaurantModalContent(restaurant) {
     `;
     
     // Load menu
-    loadRestaurantMenu(restaurant.id);
+    loadRestaurantMenuFromAPI(menuItems);
 }
 
-function loadRestaurantMenu(restaurantId) {
-    const menuItems = mockData.menuItems.filter(item => item.restaurantId === restaurantId);
-    
+function loadRestaurantMenuFromAPI(menuItems) {
     // Group by category
     const categories = {};
     menuItems.forEach(item => {
@@ -505,19 +248,30 @@ function loadRestaurantMenu(restaurantId) {
 function createMenuItemHTML(item) {
     return `
         <div class="menu-item">
-            <img src="${item.image}" alt="${item.name}" class="menu-item-image">
+            <img src="${item.image_url || 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=300&h=200&fit=crop'}" alt="${item.name}" class="menu-item-image">
             <div class="menu-item-info">
                 <h4 class="menu-item-name">${item.name}</h4>
                 <p class="menu-item-description">${item.description}</p>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
                     <span class="menu-item-price">$${item.price.toFixed(2)}</span>
-                    <button class="add-to-cart-btn" onclick="addToCart('${item.id}')">
-                        Add to Cart
-                    </button>
+                    ${item.is_available ? `
+                        <button class="add-to-cart-btn" onclick="addToCart('${item.id}')">
+                            Add to Cart
+                        </button>
+                    ` : `
+                        <span class="unavailable">Unavailable</span>
+                    `}
                 </div>
+                ${item.is_vegetarian ? '<span class="dietary-tag">🌱 Vegetarian</span>' : ''}
+                ${item.is_vegan ? '<span class="dietary-tag">🌿 Vegan</span>' : ''}
             </div>
         </div>
     `;
+}
+
+function closeRestaurantModal() {
+    document.getElementById('restaurant-modal').style.display = 'none';
+    currentRestaurant = null;
 }
 
 function scrollToCategory(category) {
@@ -535,10 +289,35 @@ function scrollToCategory(category) {
     }
 }
 
-// CART FUNCTIONALITY
+// CART FUNCTIONALITY (Enhanced with backend data)
 function addToCart(menuItemId) {
-    const menuItem = mockData.menuItems.find(item => item.id === menuItemId);
-    if (!menuItem || !currentRestaurant) return;
+    if (!currentRestaurant) return;
+    
+    // Find the menu item in the current restaurant's menu
+    const menuItemsContainer = document.getElementById('menu-items');
+    const menuItemElements = menuItemsContainer.querySelectorAll('.menu-item');
+    
+    let menuItem = null;
+    for (let element of menuItemElements) {
+        const addButton = element.querySelector(`[onclick="addToCart('${menuItemId}')"]`);
+        if (addButton) {
+            const nameEl = element.querySelector('.menu-item-name');
+            const priceEl = element.querySelector('.menu-item-price');
+            const imageEl = element.querySelector('.menu-item-image');
+            
+            menuItem = {
+                id: menuItemId,
+                name: nameEl.textContent,
+                price: parseFloat(priceEl.textContent.replace('$', '')),
+                image: imageEl.src,
+                restaurantId: currentRestaurant.id,
+                restaurantName: currentRestaurant.name
+            };
+            break;
+        }
+    }
+    
+    if (!menuItem) return;
     
     // Check if cart has items from different restaurant
     if (cart.length > 0 && cart[0].restaurantId !== currentRestaurant.id) {
@@ -555,12 +334,7 @@ function addToCart(menuItemId) {
         existingItem.quantity += 1;
     } else {
         cart.push({
-            id: menuItemId,
-            name: menuItem.name,
-            price: menuItem.price,
-            image: menuItem.image,
-            restaurantId: currentRestaurant.id,
-            restaurantName: currentRestaurant.name,
+            ...menuItem,
             quantity: 1
         });
     }
@@ -570,11 +344,14 @@ function addToCart(menuItemId) {
     showNotification(`${menuItem.name} added to cart!`);
 }
 
+// Enhanced cart functions
 function updateCartDisplay() {
     const cartCount = document.getElementById('cart-count');
     const cartContent = document.getElementById('cart-content');
     const cartFooter = document.getElementById('cart-footer');
     const emptyCart = document.getElementById('empty-cart');
+    
+    if (!cartCount) return; // User not logged in or cart not available
     
     // Update cart count
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -629,15 +406,21 @@ function updateCartItemQuantity(itemId, change) {
 
 function updateCartTotals() {
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const restaurant = mockData.restaurants.find(r => r.id === cart[0]?.restaurantId);
-    const deliveryFee = restaurant ? restaurant.deliveryFee : 0;
+    
+    // Get restaurant delivery fee (assuming current restaurant)
+    const deliveryFee = currentRestaurant ? currentRestaurant.delivery_fee : 3.99;
     const tax = subtotal * 0.08; // 8% tax
     const total = subtotal + deliveryFee + tax;
     
-    document.getElementById('cart-subtotal').textContent = `$${subtotal.toFixed(2)}`;
-    document.getElementById('cart-delivery-fee').textContent = `$${deliveryFee.toFixed(2)}`;
-    document.getElementById('cart-tax').textContent = `$${tax.toFixed(2)}`;
-    document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
+    const subtotalEl = document.getElementById('cart-subtotal');
+    const deliveryFeeEl = document.getElementById('cart-delivery-fee');
+    const taxEl = document.getElementById('cart-tax');
+    const totalEl = document.getElementById('cart-total');
+    
+    if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+    if (deliveryFeeEl) deliveryFeeEl.textContent = `$${deliveryFee.toFixed(2)}`;
+    if (taxEl) taxEl.textContent = `$${tax.toFixed(2)}`;
+    if (totalEl) totalEl.textContent = `$${total.toFixed(2)}`;
 }
 
 function openCart() {
@@ -648,13 +431,22 @@ function closeCart() {
     document.getElementById('cart-sidebar').classList.remove('open');
 }
 
-// CHECKOUT FUNCTIONALITY
-function checkout() {
+// CHECKOUT WITH BACKEND
+async function checkout() {
     if (cart.length === 0) return;
+    
+    if (!currentUser) {
+        showNotification('Please sign in to place an order', 'error');
+        openSignInModal();
+        return;
+    }
     
     // Pre-fill checkout form
     const deliveryAddress = document.getElementById('delivery-address').value;
     document.getElementById('delivery-address-checkout').value = deliveryAddress;
+    document.getElementById('customer-name').value = `${currentUser.first_name} ${currentUser.last_name}`;
+    document.getElementById('customer-email').value = currentUser.email;
+    document.getElementById('customer-phone').value = currentUser.phone || '';
     
     // Update checkout order summary
     updateCheckoutOrderSummary();
@@ -670,10 +462,10 @@ function closeCheckoutModal() {
 
 function updateCheckoutOrderSummary() {
     const summaryContainer = document.getElementById('checkout-order-summary');
-    const restaurant = mockData.restaurants.find(r => r.id === cart[0]?.restaurantId);
+    const restaurant = currentRestaurant;
     
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const deliveryFee = restaurant ? restaurant.deliveryFee : 0;
+    const deliveryFee = restaurant ? restaurant.delivery_fee : 3.99;
     const tax = subtotal * 0.08;
     const total = subtotal + deliveryFee + tax;
     
@@ -709,54 +501,54 @@ function updateCheckoutOrderSummary() {
     document.getElementById('checkout-total').textContent = `$${total.toFixed(2)}`;
 }
 
-function placeOrder() {
+async function placeOrder() {
     // Validate form
-    const form = document.getElementById('checkout-form');
     const customerName = document.getElementById('customer-name').value;
     const customerPhone = document.getElementById('customer-phone').value;
     const customerEmail = document.getElementById('customer-email').value;
     const deliveryAddress = document.getElementById('delivery-address-checkout').value;
+    const deliveryInstructions = document.getElementById('delivery-instructions').value;
     
     if (!customerName || !customerPhone || !customerEmail || !deliveryAddress) {
         showNotification('Please fill in all required fields', 'error');
         return;
     }
     
-    // Create order object
-    const restaurant = mockData.restaurants.find(r => r.id === cart[0]?.restaurantId);
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const deliveryFee = restaurant ? restaurant.deliveryFee : 0;
-    const tax = subtotal * 0.08;
-    const total = subtotal + deliveryFee + tax;
+    if (!currentUser) {
+        showNotification('Please sign in to place an order', 'error');
+        return;
+    }
     
-    const order = {
-        id: `order-${Date.now()}`,
-        customerName,
-        customerPhone,
-        customerEmail,
-        deliveryAddress,
-        restaurantId: restaurant.id,
-        restaurantName: restaurant.name,
-        items: [...cart],
-        subtotal,
-        deliveryFee,
-        tax,
-        total,
-        orderTime: new Date(),
-        estimatedDelivery: new Date(Date.now() + restaurant.estimatedDeliveryTime * 60000),
-        status: 'pending'
-    };
-    
-    // Show order confirmation
-    showOrderConfirmation(order);
-    
-    // Clear cart
-    cart = [];
-    updateCartDisplay();
-    saveCartToStorage();
-    
-    // Close checkout modal
-    closeCheckoutModal();
+    try {
+        // Create order object for API
+        const orderData = {
+            restaurant_id: cart[0].restaurantId,
+            delivery_address: deliveryAddress,
+            delivery_instructions: deliveryInstructions,
+            items: cart.map(item => ({
+                menu_item_id: item.id,
+                quantity: item.quantity
+            }))
+        };
+        
+        // Place order via API
+        const order = await createOrder(orderData);
+        
+        // Show order confirmation
+        showOrderConfirmation(order);
+        
+        // Clear cart
+        cart = [];
+        updateCartDisplay();
+        saveCartToStorage();
+        
+        // Close checkout modal
+        closeCheckoutModal();
+        
+    } catch (error) {
+        console.error('Order placement failed:', error);
+        showNotification('Failed to place order. Please try again.', 'error');
+    }
 }
 
 function showOrderConfirmation(order) {
@@ -765,9 +557,10 @@ function showOrderConfirmation(order) {
     detailsContainer.innerHTML = `
         <div class="order-summary">
             <p><strong>Order ID:</strong> ${order.id}</p>
-            <p><strong>Restaurant:</strong> ${order.restaurantName}</p>
-            <p><strong>Estimated Delivery:</strong> ${formatTime(order.estimatedDelivery)}</p>
-            <p><strong>Total:</strong> $${order.total.toFixed(2)}</p>
+            <p><strong>Restaurant:</strong> ${order.restaurant.name}</p>
+            <p><strong>Status:</strong> ${order.status}</p>
+            <p><strong>Total:</strong> $${order.total_amount.toFixed(2)}</p>
+            <p><strong>Estimated Delivery:</strong> ${order.estimated_delivery_time ? new Date(order.estimated_delivery_time).toLocaleTimeString() : 'TBD'}</p>
         </div>
     `;
     
@@ -778,7 +571,7 @@ function closeOrderConfirmation() {
     document.getElementById('order-confirmation-modal').style.display = 'none';
 }
 
-// AUTHENTICATION
+// AUTHENTICATION WITH BACKEND
 function openSignInModal() {
     document.getElementById('signin-modal').style.display = 'block';
 }
@@ -805,64 +598,60 @@ function switchToSignIn() {
     openSignInModal();
 }
 
-function handleSignIn(event) {
+async function handleSignIn(event) {
     event.preventDefault();
     
     const email = document.getElementById('signin-email').value;
     const password = document.getElementById('signin-password').value;
     
-    // Mock authentication
-    currentUser = {
-        email,
-        name: email.split('@')[0]
-    };
-    
-    closeSignInModal();
-    showNotification(`Welcome back, ${currentUser.name}!`);
-    
-    // Update UI to show user is logged in
-    updateAuthUI();
-}
-
-function handleSignUp(event) {
-    event.preventDefault();
-    
-    const name = document.getElementById('signup-name').value;
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
-    
-    // Mock registration
-    currentUser = {
-        email,
-        name
-    };
-    
-    closeSignUpModal();
-    showNotification(`Welcome, ${currentUser.name}! Your account has been created.`);
-    
-    // Update UI to show user is logged in
-    updateAuthUI();
-}
-
-function updateAuthUI() {
-    const headerActions = document.querySelector('.header-actions');
-    
-    if (currentUser) {
-        headerActions.innerHTML = `
-            <span>Hello, ${currentUser.name}</span>
-            <button class="btn-secondary" onclick="signOut()">Sign Out</button>
-            <div class="cart-icon" onclick="openCart()">
-                🛒
-                <span class="cart-count" id="cart-count">0</span>
-            </div>
-        `;
+    try {
+        const user = await loginUser(email, password);
+        
+        closeSignInModal();
+        showNotification(`Welcome back, ${user.first_name}!`);
+        
+        updateAuthUI();
         updateCartDisplay();
+        
+        // Reset form
+        document.getElementById('signin-form').reset();
+        
+    } catch (error) {
+        showNotification(error.message, 'error');
     }
 }
 
-function signOut() {
-    currentUser = null;
-    location.reload();
+async function handleSignUp(event) {
+    event.preventDefault();
+    
+    const firstName = document.getElementById('signup-name').value.split(' ')[0];
+    const lastName = document.getElementById('signup-name').value.split(' ').slice(1).join(' ') || firstName;
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+    
+    try {
+        const userData = {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            password: password,
+            role: "customer"
+        };
+        
+        await registerUser(userData);
+        
+        closeSignUpModal();
+        showNotification(`Welcome, ${firstName}! Your account has been created.`);
+        
+        updateAuthUI();
+        updateCartDisplay();
+        
+        // Reset form
+        document.getElementById('signup-form').reset();
+        
+    } catch (error) {
+        showNotification(error.message, 'error');
+    }
 }
 
 // SEARCH FUNCTIONALITY
@@ -899,75 +688,3 @@ function formatTime(date) {
         hour12: true
     }).format(new Date(date));
 }
-
-function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'error' ? '#dc3545' : '#00D262'};
-        color: white;
-        padding: 15px 25px;
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        z-index: 3000;
-        font-weight: 600;
-        animation: slideInRight 0.3s ease;
-        max-width: 300px;
-    `;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
-    }, 3000);
-}
-
-// Add notification animations
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideInRight {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    
-    @keyframes slideOutRight {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-    }
-    
-    .summary-item {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        padding: 5px 0;
-    }
-    
-    .summary-item.total {
-        font-weight: 700;
-        font-size: 18px;
-        border-top: 2px solid #e9ecef;
-        padding-top: 15px;
-        margin-top: 15px;
-    }
-    
-    .order-summary-restaurant {
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        border-bottom: 2px solid #e9ecef;
-    }
-    
-    .order-summary-restaurant h4 {
-        font-size: 18px;
-        font-weight: 700;
-        color: #1a1a1a;
-    }
-`;
-document.head.appendChild(style);
