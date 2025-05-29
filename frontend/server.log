@@ -31,3 +31,7 @@ Hit CTRL-C to stop the server
 [Thu May 29 2025 03:13:56 GMT+0000 (Coordinated Universal Time)]  "GET /customer-styles.css" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36"
 [Thu May 29 2025 03:13:56 GMT+0000 (Coordinated Universal Time)]  "GET /customer-script.js" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36"
 [Thu May 29 2025 03:39:29 GMT+0000 (Coordinated Universal Time)]  "GET /index.html" "curl/7.88.1"
+[Thu May 29 2025 03:40:41 GMT+0000 (Coordinated Universal Time)]  "GET /index.html" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36"
+[Thu May 29 2025 03:40:41 GMT+0000 (Coordinated Universal Time)]  "GET /customer-styles.css" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36"
+[Thu May 29 2025 03:40:41 GMT+0000 (Coordinated Universal Time)]  "GET /api.js" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36"
+[Thu May 29 2025 03:40:41 GMT+0000 (Coordinated Universal Time)]  "GET /customer-script.js" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36"
