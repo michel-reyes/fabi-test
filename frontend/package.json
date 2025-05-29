@@ -1,24 +1,20 @@
 {
-  "name": "frontend",
+  "name": "uber-eats-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/node": "^22.15.24",
-    "@types/react": "^19.1.6",
-    "@types/react-dom": "^19.1.5",
     "axios": "^1.8.4",
-    "cra-template": "1.2.0",
+    "next": "^15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.5.1",
-    "react-scripts": "5.0.1",
-    "typescript": "^5.8.3"
+    "framer-motion": "^11.15.2",
+    "lucide-react": "^0.468.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint"
   },
   "browserslist": {
     "production": [
