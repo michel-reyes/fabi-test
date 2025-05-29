@@ -73,7 +73,19 @@ async function loadRestaurantsFromAPI(cuisineType = null, sortBy = 'rating') {
         }
         
         // Load restaurants from API
-        const restaurants = await loadRestaurants(cuisineType === 'all' ? null : cuisineType, sortBy);
+        let restaurants;
+        if (typeof loadRestaurants === 'function') {
+            restaurants = await loadRestaurants(cuisineType === 'all' ? null : cuisineType, sortBy);
+        } else {
+            // Fallback to direct API call if loadRestaurants function not available
+            const apiUrl = `http://localhost:8002/restaurants${cuisineType && cuisineType !== 'all' ? '?cuisine_type=' + cuisineType : ''}`;
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            restaurants = await response.json();
+            restaurants = sortRestaurants(restaurants, sortBy);
+        }
         
         // Clear container
         container.innerHTML = '';
