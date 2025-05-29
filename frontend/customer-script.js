@@ -8,7 +8,10 @@ let currentRestaurant = null;
 
 // INITIALIZATION
 document.addEventListener('DOMContentLoaded', function() {
-    initializeAuth();
+    // Initialize auth if available, otherwise continue without it
+    if (typeof initializeAuth === 'function') {
+        initializeAuth();
+    }
     loadRestaurantsFromAPI();
     setupEventListeners();
     loadCartFromStorage();
