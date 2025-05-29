@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uber Eats Clone - Admin Dashboard</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <h2>🍽️ UberEats</h2>
+                <span class="admin-badge">Admin</span>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#" class="nav-link active" data-section="dashboard">📊 Dashboard</a></li>
+                <li><a href="#" class="nav-link" data-section="restaurants">🏪 Restaurants</a></li>
+                <li><a href="#" class="nav-link" data-section="menu">📝 Menu Management</a></li>
+                <li><a href="#" class="nav-link" data-section="orders">📦 Orders</a></li>
+                <li><a href="#" class="nav-link" data-section="analytics">📈 Analytics</a></li>
+                <li><a href="#" class="nav-link" data-section="customers">👥 Customers</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-left">
+                <h1 id="page-title">Dashboard Overview</h1>
+            </div>
+            <div class="header-right">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search restaurants, orders...">
+                    <button>🔍</button>
+                </div>
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="Admin" class="profile-img">
+                    <span>Admin User</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD SECTION -->
+        <section id="dashboard" class="content-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🏪</div>
+                    <div class="stat-content">
+                        <h3>4</h3>
+                        <p>Active Restaurants</p>
+                        <span class="stat-change positive">+2 this week</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-content">
+                        <h3>247</h3>
+                        <p>Total Orders</p>
+                        <span class="stat-change positive">+12.5%</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-content">
+                        <h3>$8,940</h3>
+                        <p>Revenue Today</p>
+                        <span class="stat-change positive">+8.2%</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-content">
+                        <h3>4.6</h3>
+                        <p>Avg Rating</p>
+                        <span class="stat-change positive">+0.3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-charts">
+                <div class="chart-card">
+                    <h3>Recent Orders</h3>
+                    <div class="orders-list">
+                        <div class="order-item">
+                            <img src="https://images.pexels.com/photos/28528512/pexels-photo-28528512.jpeg" alt="Pizza">
+                            <div class="order-details">
+                                <p class="order-restaurant">Mario's Italian Kitchen</p>
+                                <p class="order-customer">John Doe</p>
+                                <p class="order-amount">$32.50</p>
+                            </div>
+                            <span class="order-status delivering">Delivering</span>
+                        </div>
+                        <div class="order-item">
+                            <img src="https://images.pexels.com/photos/6646264/pexels-photo-6646264.jpeg" alt="Dumplings">
+                            <div class="order-details">
+                                <p class="order-restaurant">Dragon Palace</p>
+                                <p class="order-customer">Jane Smith</p>
+                                <p class="order-amount">$45.80</p>
+                            </div>
+                            <span class="order-status preparing">Preparing</span>
+                        </div>
+                        <div class="order-item">
+                            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=60&h=60&fit=crop" alt="Pizza">
+                            <div class="order-details">
+                                <p class="order-restaurant">Bella Roma Pizzeria</p>
+                                <p class="order-customer">Mike Johnson</p>
+                                <p class="order-amount">$28.90</p>
+                            </div>
+                            <span class="order-status delivered">Delivered</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3>Top Performing Restaurants</h3>
+                    <div class="restaurant-ranking">
+                        <div class="ranking-item">
+                            <span class="rank">1</span>
+                            <img src="https://images.pexels.com/photos/2670327/pexels-photo-2670327.jpeg" alt="Dragon Palace">
+                            <div class="restaurant-info">
+                                <p class="restaurant-name">Dragon Palace</p>
+                                <p class="restaurant-orders">89 orders today</p>
+                            </div>
+                            <span class="restaurant-rating">4.7⭐</span>
+                        </div>
+                        <div class="ranking-item">
+                            <span class="rank">2</span>
+                            <img src="https://images.unsplash.com/photo-1574615552620-54cd32a28519?w=60&h=60&fit=crop" alt="Mario's">
+                            <div class="restaurant-info">
+                                <p class="restaurant-name">Mario's Italian Kitchen</p>
+                                <p class="restaurant-orders">76 orders today</p>
+                            </div>
+                            <span class="restaurant-rating">4.5⭐</span>
+                        </div>
+                        <div class="ranking-item">
+                            <span class="rank">3</span>
+                            <img src="https://images.unsplash.com/photo-1552580715-4d9bc27f1e2f?w=60&h=60&fit=crop" alt="Bella Roma">
+                            <div class="restaurant-info">
+                                <p class="restaurant-name">Bella Roma Pizzeria</p>
+                                <p class="restaurant-orders">54 orders today</p>
+                            </div>
+                            <span class="restaurant-rating">4.3⭐</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESTAURANTS SECTION -->
+        <section id="restaurants" class="content-section">
+            <div class="section-header">
+                <h2>Restaurant Management</h2>
+                <button class="btn-primary" onclick="openAddRestaurantModal()">+ Add Restaurant</button>
+            </div>
+            
+            <div class="restaurants-grid" id="restaurants-grid">
+                <!-- Restaurants will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- MENU MANAGEMENT SECTION -->
+        <section id="menu" class="content-section">
+            <div class="section-header">
+                <h2>Menu Management</h2>
+                <div class="menu-filters">
+                    <select id="restaurant-filter">
+                        <option value="">All Restaurants</option>
+                    </select>
+                    <button class="btn-primary" onclick="openAddMenuItemModal()">+ Add Menu Item</button>
+                </div>
+            </div>
+            
+            <div class="menu-items-container" id="menu-items-container">
+                <!-- Menu items will be dynamically loaded here -->
+            </div>
+        </section>
+
+        <!-- ORDERS SECTION -->
+        <section id="orders" class="content-section">
+            <div class="section-header">
+                <h2>Order Management</h2>
+                <div class="order-filters">
+                    <select id="status-filter">
+                        <option value="">All Orders</option>
+                        <option value="pending">Pending</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="preparing">Preparing</option>
+                        <option value="ready">Ready</option>
+                        <option value="delivering">Delivering</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="orders-table-container">
+                <table class="orders-table" id="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Restaurant</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                        <!-- Orders will be dynamically loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ANALYTICS SECTION -->
+        <section id="analytics" class="content-section">
+            <div class="section-header">
+                <h2>Analytics & Reports</h2>
+            </div>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Revenue Trends</h3>
+                    <div class="chart-placeholder">
+                        <p>📈 Revenue Chart</p>
+                        <div class="trend-data">
+                            <div class="trend-item">
+                                <span>Today</span>
+                                <span>$8,940</span>
+                            </div>
+                            <div class="trend-item">
+                                <span>Yesterday</span>
+                                <span>$7,650</span>
+                            </div>
+                            <div class="trend-item">
+                                <span>This Week</span>
+                                <span>$52,380</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analytics-card">
+                    <h3>Popular Cuisines</h3>
+                    <div class="cuisine-stats">
+                        <div class="cuisine-item">
+                            <span>🇨🇳 Chinese</span>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 65%"></div>
+                            </div>
+                            <span>65%</span>
+                        </div>
+                        <div class="cuisine-item">
+                            <span>🇮🇹 Italian</span>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 35%"></div>
+                            </div>
+                            <span>35%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CUSTOMERS SECTION -->
+        <section id="customers" class="content-section">
+            <div class="section-header">
+                <h2>Customer Management</h2>
+            </div>
+            
+            <div class="customers-table-container">
+                <table class="customers-table">
+                    <thead>
+                        <tr>
+                            <th>Customer ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Total Orders</th>
+                            <th>Total Spent</th>
+                            <th>Last Order</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customers-table-body">
+                        <!-- Customers will be dynamically loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- MODALS -->
+    <!-- Add Restaurant Modal -->
+    <div id="add-restaurant-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('add-restaurant-modal')">&times;</span>
+            <h2>Add New Restaurant</h2>
+            <form id="add-restaurant-form">
+                <div class="form-group">
+                    <label for="restaurant-name">Restaurant Name</label>
+                    <input type="text" id="restaurant-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="restaurant-cuisine">Cuisine Type</label>
+                    <select id="restaurant-cuisine" required>
+                        <option value="">Select Cuisine</option>
+                        <option value="italian">Italian</option>
+                        <option value="chinese">Chinese</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="restaurant-description">Description</label>
+                    <textarea id="restaurant-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="restaurant-address">Address</label>
+                    <input type="text" id="restaurant-address" required>
+                </div>
+                <div class="form-group">
+                    <label for="restaurant-phone">Phone</label>
+                    <input type="tel" id="restaurant-phone" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" onclick="closeModal('add-restaurant-modal')">Cancel</button>
+                    <button type="submit">Add Restaurant</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Menu Item Modal -->
+    <div id="add-menu-item-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('add-menu-item-modal')">&times;</span>
+            <h2>Add Menu Item</h2>
+            <form id="add-menu-item-form">
+                <div class="form-group">
+                    <label for="menu-restaurant">Restaurant</label>
+                    <select id="menu-restaurant" required>
+                        <option value="">Select Restaurant</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="menu-item-name">Item Name</label>
+                    <input type="text" id="menu-item-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="menu-item-description">Description</label>
+                    <textarea id="menu-item-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="menu-item-price">Price ($)</label>
+                    <input type="number" id="menu-item-price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="menu-item-category">Category</label>
+                    <select id="menu-item-category" required>
+                        <option value="">Select Category</option>
+                        <option value="appetizers">Appetizers</option>
+                        <option value="mains">Main Courses</option>
+                        <option value="desserts">Desserts</option>
+                        <option value="beverages">Beverages</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" onclick="closeModal('add-menu-item-modal')">Cancel</button>
+                    <button type="submit">Add Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>
