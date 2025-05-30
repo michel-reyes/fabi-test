@@ -3,7 +3,7 @@
 // ===============================================
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:8002';
+const API_BASE_URL = 'http://localhost:8005/api';
 
 // Global state
 let currentUser = null;
@@ -12,24 +12,35 @@ let authToken = null;
 // Utility function to make API calls
 async function apiCall(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
+    
+    // Create a properly typed fetch request configuration
     const config = {
+        method: options.method || 'GET',
         headers: {
             'Content-Type': 'application/json',
-            ...(authToken && { 'Authorization': `Bearer ${authToken}` })
-        },
-        ...options
+            ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
+            ...(options.headers || {})
+        }
     };
     
-    if (config.body && typeof config.body === 'object') {
-        config.body = JSON.stringify(config.body);
+    // Handle body separately
+    if (options.body) {
+        config.body = typeof options.body === 'object' ? 
+            JSON.stringify(options.body) : options.body;
     }
     
     try {
         const response = await fetch(url, config);
         
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+            // Adjust error handling for Next.js API response format
+            try {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            } catch (e) {
+                // If response isn't JSON
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
         }
         
         return await response.json();
@@ -42,25 +53,38 @@ async function apiCall(endpoint, options = {}) {
 // Authentication functions
 async function loginUser(email, password) {
     try {
-        const formData = new FormData();
-        formData.append('username', email);
-        formData.append('password', password);
-        
-        const response = await fetch(`${API_BASE_URL}/token`, {
+        // New API uses JSON request body instead of form data
+        const response = await fetch(`${API_BASE_URL}/login`, {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email,
+                password
+            })
         });
         
         if (!response.ok) {
             throw new Error('Invalid email or password');
         }
         
-        const tokenData = await response.json();
-        authToken = tokenData.access_token;
+        const data = await response.json();
+        if (!data.success || !data.token) {
+            throw new Error('Authentication failed');
+        }
+        
+        // Store the token
+        authToken = data.token;
         localStorage.setItem('authToken', authToken);
         
-        // Get user info
-        currentUser = await apiCall('/users/me');
+        // User info is included in response, but fetch from /users/me as backup
+        if (data.user) {
+            currentUser = data.user;
+        } else {
+            // Get user info
+            currentUser = await apiCall('/users/me');
+        }
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         
         return currentUser;
@@ -72,15 +96,33 @@ async function loginUser(email, password) {
 
 async function registerUser(userData) {
     try {
-        const user = await apiCall('/register', {
+        // Send registration request to new Next.js backend
+        const response = await fetch(`${API_BASE_URL}/register`, {
             method: 'POST',
-            body: userData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: userData.email,
+                password: userData.password,
+                firstName: userData.first_name || userData.firstName, // Support both naming conventions
+                lastName: userData.last_name || userData.lastName,
+                phone: userData.phone,
+                role: userData.role || 'customer'
+            })
         });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Registration failed');
+        }
+        
+        const data = await response.json();
         
         // Auto-login after registration
         await loginUser(userData.email, userData.password);
         
-        return user;
+        return data.user;
     } catch (error) {
         console.error('Registration failed:', error);
         throw error;
@@ -118,10 +160,11 @@ async function loadRestaurants(cuisineType = null, sortBy = 'rating') {
         }
         
         endpoint += params.toString();
-        const restaurants = await apiCall(endpoint);
+        const response = await apiCall(endpoint);
+        const restaurantsArray = response.restaurants || [];
         
         // Sort restaurants client-side for now
-        return sortRestaurants(restaurants, sortBy);
+        return sortRestaurants(restaurantsArray, sortBy);
     } catch (error) {
         console.error('Failed to load restaurants:', error);
         showNotification('Failed to load restaurants', 'error');
@@ -131,8 +174,20 @@ async function loadRestaurants(cuisineType = null, sortBy = 'rating') {
 
 async function loadRestaurantDetails(restaurantId) {
     try {
-        const restaurant = await apiCall(`/restaurants/${restaurantId}`);
-        const menuItems = await apiCall(`/restaurants/${restaurantId}/menu-items`);
+        const restaurantResponse = await apiCall(`/restaurants/${restaurantId}`);
+        const menuItemsResponse = await apiCall(`/restaurants/${restaurantId}/menu-items`);
+        
+        // Extract the restaurant and menuItems from the response objects
+        const restaurant = restaurantResponse.restaurant || {};
+        const menuItems = menuItemsResponse.menuItems || [];
+        
+        // Ensure numeric fields needed for toFixed() exist
+        if (restaurant) {
+            restaurant.average_rating = restaurant.average_rating || 0;
+            restaurant.delivery_fee = restaurant.delivery_fee || 0;
+            restaurant.minimum_order = restaurant.minimum_order || 0;
+            restaurant.total_reviews = restaurant.total_reviews || 0;
+        }
         
         return { restaurant, menuItems };
     } catch (error) {
@@ -204,7 +259,8 @@ async function updateRestaurant(restaurantId, updateData) {
 
 async function getMyRestaurants() {
     try {
-        return await apiCall('/my-restaurants');
+        const response = await apiCall('/my-restaurants');
+        return response.restaurants || [];
     } catch (error) {
         console.error('Failed to load my restaurants:', error);
         return [];
@@ -231,7 +287,8 @@ async function loadOrders(status = null) {
             endpoint += `?status=${status}`;
         }
         
-        return await apiCall(endpoint);
+        const response = await apiCall(endpoint);
+        return response.orders || [];
     } catch (error) {
         console.error('Failed to load orders:', error);
         return [];
@@ -299,6 +356,9 @@ function showNotification(message, type = 'success') {
 function updateAuthUI() {
     const headerActions = document.querySelector('.header-actions');
     
+    // Return early if headerActions doesn't exist in the DOM
+    if (!headerActions) return;
+    
     if (currentUser) {
         headerActions.innerHTML = `
             <span>Hello, ${currentUser.first_name}!</span>
@@ -330,7 +390,9 @@ function showSellerDashboardLink() {
         dashboardLink.style.marginRight = '15px';
         
         const headerActions = document.querySelector('.header-actions');
-        headerActions.insertBefore(dashboardLink, headerActions.firstChild);
+        if (headerActions) {
+            headerActions.insertBefore(dashboardLink, headerActions.firstChild);
+        }
     }
 }
 

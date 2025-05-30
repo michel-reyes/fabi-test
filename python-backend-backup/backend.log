@@ -1,0 +1,11 @@
+INFO:     Will watch for changes in these directories: ['/app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8002 (Press CTRL+C to quit)
+INFO:     Started reloader process [4112] using WatchFiles
+INFO:     Started server process [4126]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:34472 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60284 - "GET /restaurants HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39460 - "GET /restaurants HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55694 - "OPTIONS /restaurants HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55700 - "GET /restaurants HTTP/1.1" 200 OK

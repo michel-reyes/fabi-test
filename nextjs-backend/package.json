@@ -1,0 +1,49 @@
+{
+  "name": "nextjs-backend",
+  "version": "1.0.0",
+  "description": "Next.js backend API for Uber Eats Clone",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev -p 8005",
+    "build": "next build",
+    "start": "next start -p 8005",
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nextjs",
+    "api",
+    "uber-eats",
+    "food-delivery"
+  ],
+  "author": "",
+  "license": "ISC",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^22.15.26",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "autoprefixer": "^10.4.21",
+    "bcrypt": "^6.0.0",
+    "eslint": "^9.27.0",
+    "eslint-config-next": "^15.3.3",
+    "jsonwebtoken": "^9.0.2",
+    "next": "^15.3.3",
+    "postcss": "^8.5.4",
+    "prisma": "^6.8.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^4.1.8"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

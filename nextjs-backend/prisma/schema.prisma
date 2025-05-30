@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String       @id @default(uuid())
+  email            String       @unique
+  passwordHash     String
+  firstName        String
+  lastName         String
+  phone            String?
+  role             String       @default("customer")
+  isActive         Boolean      @default(true)
+  profileImageUrl  String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  orders           Order[]      @relation("CustomerOrders")
+  ownedRestaurants Restaurant[] @relation("RestaurantOwner")
+
+  @@map("users")
+}
+
+model Restaurant {
+  id                    String     @id @default(uuid())
+  ownerId               String
+  name                  String
+  description           String?
+  cuisineType           String
+  phone                 String?
+  email                 String?
+  streetAddress         String
+  apartment             String?
+  city                  String
+  state                 String
+  postalCode            String
+  latitude              Float?
+  longitude             Float?
+  coverImageUrl         String?
+  logoUrl               String?
+  isActive              Boolean    @default(true)
+  isOpen                Boolean    @default(false)
+  averageRating         Float      @default(0.0)
+  totalReviews          Int        @default(0)
+  totalOrders           Int        @default(0)
+  deliveryFee           Float      @default(2.99)
+  minimumOrder          Float      @default(0.0)
+  estimatedDeliveryTime Int        @default(30)
+  businessHours         Json?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+  menuItems             MenuItem[] @relation("RestaurantMenuItems")
+  orders                Order[]    @relation("RestaurantOrders")
+  owner                 User       @relation("RestaurantOwner", fields: [ownerId], references: [id])
+
+  @@map("restaurants")
+}
+
+model MenuItem {
+  id                   String      @id @default(uuid())
+  restaurantId         String
+  name                 String
+  description          String?
+  price                Float
+  imageUrl             String?
+  isAvailable          Boolean     @default(true)
+  isVegetarian         Boolean     @default(false)
+  isVegan              Boolean     @default(false)
+  isGlutenFree         Boolean     @default(false)
+  spiceLevel           Int         @default(0)
+  calories             Int?
+  prepTime             Int         @default(15)
+  category             String      @default("mains")
+  customizationOptions Json?
+  sortOrder            Int         @default(0)
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  restaurant           Restaurant  @relation("RestaurantMenuItems", fields: [restaurantId], references: [id])
+  orderItems           OrderItem[] @relation("MenuItemOrders")
+
+  @@map("menu_items")
+}
+
+model Order {
+  id                    String      @id @default(uuid())
+  customerId            String
+  restaurantId          String
+  status                String      @default("pending")
+  deliveryAddress       String
+  deliveryInstructions  String?
+  subtotal              Float
+  deliveryFee           Float
+  taxAmount             Float
+  tipAmount             Float       @default(0.0)
+  totalAmount           Float
+  estimatedDeliveryTime DateTime?
+  actualDeliveryTime    DateTime?
+  paymentStatus         String      @default("pending")
+  paymentMethod         String?
+  specialInstructions   String?
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  orderItems            OrderItem[] @relation("OrderDetails")
+  restaurant            Restaurant  @relation("RestaurantOrders", fields: [restaurantId], references: [id])
+  customer              User        @relation("CustomerOrders", fields: [customerId], references: [id])
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id                  String   @id @default(uuid())
+  orderId             String
+  menuItemId          String
+  quantity            Int      @default(1)
+  unitPrice           Float
+  totalPrice          Float
+  customizations      Json?
+  specialInstructions String?
+  createdAt           DateTime @default(now())
+  menuItem            MenuItem @relation("MenuItemOrders", fields: [menuItemId], references: [id])
+  order               Order    @relation("OrderDetails", fields: [orderId], references: [id])
+
+  @@map("order_items")
+}

@@ -1,0 +1,8 @@
+{
+  "/api/my-restaurants/route": "app/api/my-restaurants/route.js",
+  "/api/restaurants/[restaurantId]/menu-items/route": "app/api/restaurants/[restaurantId]/menu-items/route.js",
+  "/api/orders/route": "app/api/orders/route.js",
+  "/api/menu-items/[itemId]/route": "app/api/menu-items/[itemId]/route.js",
+  "/api/restaurants/route": "app/api/restaurants/route.js",
+  "/api/restaurants/[restaurantId]/route": "app/api/restaurants/[restaurantId]/route.js"
+}

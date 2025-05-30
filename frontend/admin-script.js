@@ -201,7 +201,9 @@ async function loadMenuItemsAdmin() {
         if (selectedRestaurant) {
             // Load menu items for specific restaurant
             const response = await apiCall(`/restaurants/${selectedRestaurant}/menu-items`);
-            menuItems = response.map(item => ({
+            // Extract menuItems array from response
+            const items = response.menuItems || [];
+            menuItems = items.map(item => ({
                 ...item,
                 restaurant: restaurants.find(r => r.id === selectedRestaurant)
             }));
@@ -209,7 +211,8 @@ async function loadMenuItemsAdmin() {
             // Load menu items for all user's restaurants
             for (const restaurant of restaurants) {
                 try {
-                    const items = await apiCall(`/restaurants/${restaurant.id}/menu-items`);
+                    const response = await apiCall(`/restaurants/${restaurant.id}/menu-items`);
+                    const items = response.menuItems || [];
                     menuItems.push(...items.map(item => ({
                         ...item,
                         restaurant: restaurant
